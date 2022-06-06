@@ -1,5 +1,5 @@
 # IntelliasGo
 
-branch-1
+branch-2
 
-some text for branch-1
+some text for branch-2
