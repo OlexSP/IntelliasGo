@@ -25,5 +25,6 @@ func main() {
 	}
 	sort.Ints(intSlice)
 	result = fmt.Sprintf("%v %v\n", intSlice[len(intSlice)-1], intSlice[0])
+
 	fmt.Println(result)
 }
