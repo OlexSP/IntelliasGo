@@ -6,8 +6,10 @@ import (
 
 func main() {
 	arr := []int{4, 1, 4, -4, 6, 3, 8, 8}
+
 	var result []int
-	mapCounter := make(map[int]int, len(arr))
+
+	mapCounter := make(map[int]int, len(arr)) // may be using len() is not necessary
 
 	for _, v := range arr {
 		mapCounter[v]++
