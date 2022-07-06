@@ -41,25 +41,11 @@ func (c Cow) String() string {
 	return fmt.Sprintf("%s the cow weighs %d", c.name, c.weight)
 }
 
-type foodIntakeGetter interface {
+type foodIntakeGetter interface { // did it just for practice according to the lecture
 	getFoodIntake() int
 }
 
 type animal interface {
 	foodIntakeGetter
 	fmt.Stringer
-}
-
-func farmConsume(farm []animal) int {
-	var sumFoodWeight, foodIntake int
-	for _, v := range farm {
-		foodIntake = v.getFoodIntake()
-		if foodIntake <= 0 {
-			fmt.Printf("%s has got improper weight.\n", v.String())
-			return 0
-		}
-		sumFoodWeight += foodIntake
-		fmt.Printf("%s, eats %d kg/month.\n", v.String(), foodIntake)
-	}
-	return sumFoodWeight
 }
