@@ -2,13 +2,19 @@ package main
 
 import "fmt"
 
+const ( // the obvious usage did not occur to me
+	dogEatsPerKG = 2
+	cowEatsPerKG = 25
+	catEatsPerKG = 7
+)
+
 type Dog struct {
 	name   string
 	weight int
 }
 
 func (d Dog) getFoodIntake() int {
-	return 10 / 5 * d.weight
+	return dogEatsPerKG * d.weight
 }
 
 func (d Dog) String() string {
@@ -21,7 +27,7 @@ type Cat struct {
 }
 
 func (c Cat) getFoodIntake() int {
-	return 7 * c.weight
+	return catEatsPerKG * c.weight
 }
 
 func (c Cat) String() string {
@@ -34,7 +40,7 @@ type Cow struct {
 }
 
 func (c Cow) getFoodIntake() int {
-	return 25 * c.weight
+	return cowEatsPerKG * c.weight
 }
 
 func (c Cow) String() string {
