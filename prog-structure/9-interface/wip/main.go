@@ -1,65 +1,34 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
-type truck struct {
-	capacity int
-	avgSpeed float64
-	height   int
-}
+func minInRoad(asg avgSpeedGetter, pointA, pointB int) (float64, error) {
+	avgSpeed := asg.getAvgSpeed()
 
-func (t truck) getAvgSpeed() float64 {
-	return t.avgSpeed
-}
+	if pointA > pointB {
+		return 0, errors.New("wrong data input")
+	}
 
-func (t truck) String() string {
-	return "truck"
-}
+	if err := validateSpeed(avgSpeed); err != nil {
+		return 0, fmt.Errorf("failed to calculate minutesInRoad: %w", err)
+	}
 
-type train struct {
-	capacity int
-	avgSpeed float64
-	carts    int
-}
-
-func (t train) getAvgSpeed() float64 {
-	return t.avgSpeed
-}
-func (t train) String() string {
-	return "train"
-}
-
-type pickup struct {
-	capacity int
-	avgSpeed float64
-	gasTank  int
-}
-
-func (p pickup) getAvgSpeed() float64 {
-	return p.avgSpeed
-}
-func (p pickup) String() string {
-	return "pickup"
-}
-
-type avgSpeedGetter interface {
-	getAvgSpeed() float64
-}
-
-func minInRoad(asg avgSpeedGetter, pointA, pointB int) float64 {
 	distance := pointB - pointA
 	kmPerMinute := asg.getAvgSpeed() / 60
 	roadTime := float64(distance) / kmPerMinute
-	return roadTime
+	return roadTime, nil
 }
 
-type transportNameGetter interface {
-	getTransportName() string
-}
+var slowTransportErr error = errors.New("it is too slow")
 
-type transport interface {
-	avgSpeedGetter
-	fmt.Stringer
+func validateSpeed(avgSpeed float64) error {
+	if avgSpeed < 80 {
+		return slowTransportErr
+	}
+	return nil
 }
 
 func main() {
@@ -70,10 +39,28 @@ func main() {
 		train{avgSpeed: 100},
 		pickup{avgSpeed: 80},
 	}
-
+	// truck:
+	// 		is not an option
+	//		  additional wrap
+	//			failed to calculate
+	//				it is too slow
 	for _, t := range transports {
-		mirTrack := minInRoad(t, pointA, pointB)
-		fmt.Printf("\nMinutes in road by %s : %f", t.String(), mirTrack)
+		mir, err := minInRoad(t, pointA, pointB)
+		if err != nil { // if err, adding wrap
+			err = fmt.Errorf("additional wrap: %w", err)
+		}
+
+		if errors.Is(err, slowTransportErr) {
+			fmt.Printf("\n%s: is not an option. %v", t, err)
+			continue
+		}
+
+		if err != nil {
+			fmt.Printf("All is bad: %v.\n", err)
+			return
+		}
+
+		fmt.Printf("\nMinutes in road by %-6v : %.2f", t, mir)
 	}
 
 }
