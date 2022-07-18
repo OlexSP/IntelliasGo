@@ -1,6 +1,7 @@
 package mobile
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -15,10 +16,18 @@ import (
 }*/
 
 func Test_ParsePhoneNumber(t *testing.T) {
-	got := ParsePhoneNumber("+3801112233", UA)
-	t.Log(got)
-	exp := "(UA)01112233"
-	assert.Equal(t, exp, got)
+	tests := map[string]struct {
+		number  string
+		country string
+		exp     string
+		expErr  string
+	}{
+		"success":         {number: "+3801112233", country: "UA", exp: "(UA)01112233", expErr: ""},
+		"invalid country": {number: "+3801112233", country: "UA", exp: "(UA)01112233", expErr: ""},
+	}
+	for name, tt := range tests {
+
+	}
 
 }
 
